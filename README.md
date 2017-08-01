@@ -1,5 +1,15 @@
 ## Caution: **Work in progress** - handle with care!
 
+
+## Builds status
+|    |Windows|
+|:--:|:--:   |
+|Build|[![Build status](http://petabridge-ci.cloudapp.net/app/rest/builds/buildType:AkkaNet_AkkaNetWindowsBuild/statusIcon)](http://petabridge-ci.cloudapp.net/viewType.html?buildTypeId=AkkaNet_AkkaNetWindowsBuild&guest=1)|
+|Issues|[![Stories in Ready](https://badge.waffle.io/MoimHossain/netcore-microservice-tutorial.svg?label=ready&title=Ready)](http://waffle.io/MoimHossain/netcore-microservice-tutorial)|
+
+
+
+
 # netcore-microservice-tutorial
 This repo contains some very basic code sample that demonstrates one way of designing  micro-services, using .net core web api supported by akka.net and running on a Docker Swarm cluster, traffic controlled by an nginx proxy.
 
