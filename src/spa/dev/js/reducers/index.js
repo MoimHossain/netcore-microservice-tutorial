@@ -1,4 +1,5 @@
 import {combineReducers} from 'redux';
+import EisenReducer from './reducer-eisen';
 import UserReducer from './reducer-users';
 import ActiveUserReducer from './reducer-active-user';
 
@@ -8,6 +9,7 @@ import ActiveUserReducer from './reducer-active-user';
  * */
 
 const allReducers = combineReducers({
+    eisen: EisenReducer,
     users: UserReducer,
     activeUser: ActiveUserReducer
 });
