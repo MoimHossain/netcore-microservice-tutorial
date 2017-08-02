@@ -8,7 +8,7 @@ import {selectEis} from '../../actions/actionselectEis'
 class SideBar extends Component {
 
     componentDidMount() {
-        //$('.ui.sidebar').sidebar('toggle');
+        $('.ui.sidebar').sidebar('show');
     }
 
     renderList() {
@@ -17,7 +17,7 @@ class SideBar extends Component {
                  <a className="item"
                     key={eis.id}
                     onClick={() => this.props.selectEis(eis)}>
-                    {eis.description} {eis.phase}
+                    <span><i className="sitemap icon"></i>{eis.title}</span>
                 </a>
             );
         });
@@ -30,7 +30,6 @@ class SideBar extends Component {
             </div>
         );
     }
-
 }
 
 
