@@ -6,7 +6,7 @@
     "dev": "webpack",
     "start": "webpack-dev-server"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
