@@ -1,57 +1,42 @@
 
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import EisInfo from '../components/EisInfo';
+import Feed from '../components/Feed';
+import WorkflowState from '../components/workflow-state';
 
 class EisDetail extends Component {
-    render() {
-        if (!this.props.eis) {            
-            return (
-                <div>
-                    No eis selected.
-                </div>
-            );
-        }
-        
-        return (            
-            <div className="ui ordered steps">
-              <div className="completed step">
-                <div className="content">
-                  <div className="title">SO</div>
-                  <div className="description">Schets ontwerp</div>
-                </div>
-              </div>
-              <div className="completed step">
-                <div className="content">
-                  <div className="title">DO</div>
-                  <div className="description">Definitive ontwerp</div>
-                </div>
-              </div>
-              <div className="active step">
-                <div className="content">
-                  <div className="title">VO</div>
-                  <div className="description">Voorlopig ontwerp</div>
-                </div>
-              </div>  
-              <div className="active step">
-                <div className="content">
-                  <div className="title">UO</div>
-                  <div className="description">U? ontwerp</div>
-                </div>
-              </div>
-            </div>
-        );
+  render() {
+    if (!this.props.eis) {
+      return (
+        <div className="ui segment">
+          <h1 className="ui header">No eis selected</h1>
+        </div>
+      );
     }
+
+    return (
+      <div className="ui segment">
+        <WorkflowState />
+        <div className="ui two column middle aligned very relaxed stackable grid">
+          <div className="column">
+            <br />
+            <EisInfo eis={this.props.eis} />
+          </div>
+          <div className="ui vertical divider"></div>
+          <div className="center aligned column">
+            <Feed />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {
-    return {
-        eis: state.activeEis
-    };
+  return {
+    eis: state.activeEis
+  };
 }
 
 export default connect(mapStateToProps)(EisDetail);
-
-/*<img src={this.props.user.thumbnail} />
-                <h2>{this.props.user.first} {this.props.user.last}</h2>
-                <h3>Age: {this.props.user.age}</h3>
-                <h3>Description: {this.props.user.description}</h3> */
