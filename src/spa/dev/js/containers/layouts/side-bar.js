@@ -2,13 +2,14 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {selectEis} from '../../actions/actionselectEis'
-
+import {selectEis} from '../../actions/actionselectEis';
+import loadEisen from '../../actions/actionLoadEisen';
 
 class SideBar extends Component {
 
     componentDidMount() {
         $('.ui.sidebar').sidebar('show');
+        this.props.loadEisen();
     }
 
     renderList() {
@@ -40,7 +41,7 @@ function mapStateToProps(state) {
 }
 
 function matchDispatchToProps(dispatch){
-    return bindActionCreators({selectEis: selectEis}, dispatch);
+    return bindActionCreators({selectEis: selectEis, loadEisen: loadEisen}, dispatch);
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(SideBar);

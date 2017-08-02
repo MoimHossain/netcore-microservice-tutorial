@@ -4,7 +4,8 @@ var webpack = require('webpack');
 module.exports = {
     devServer: {
         inline: true,
-        host: '0.0.0.0',        
+        host: '0.0.0.0',
+        disableHostCheck: true,
         contentBase: './src',
         port: 3000
     },
