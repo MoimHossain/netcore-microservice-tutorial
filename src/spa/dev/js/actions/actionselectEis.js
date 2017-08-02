@@ -1,5 +1,4 @@
-export const selectEis = (eis) => {
-    console.log("You clicked on eis: ", eis);
+export const selectEis = (eis) => {    
     return {
         type: 'EIS_SELECTED',
         payload: eis
