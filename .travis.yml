@@ -1,4 +1,4 @@
-before_script: cd ./src/spa/
+before_install: cd ./src/spa/
 
 language: node_js
 
