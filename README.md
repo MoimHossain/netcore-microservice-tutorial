@@ -3,7 +3,7 @@
 
 
 |    |Status|
-|:--:||
+|:--:|:--:|
 |Issues|[![Stories in Ready](https://badge.waffle.io/MoimHossain/netcore-microservice-tutorial.svg?label=ready&title=Ready)](http://waffle.io/MoimHossain/netcore-microservice-tutorial)|
 |Build|[![Build Status](https://travis-ci.org/MoimHossain/netcore-microservice-tutorial.svg?branch=master)](https://travis-ci.org/MoimHossain/netcore-microservice-tutorial)|
 
