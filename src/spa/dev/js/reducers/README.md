@@ -6,6 +6,8 @@ Reducers take in actions and update part of application state.
 
 ```
 const allReducers = combineReducers({
-    users
+    eisen: EisenReducer,
+    activeEis: ActiveEisReducer
 });
 ```
+
