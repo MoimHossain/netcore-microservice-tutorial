@@ -5,7 +5,7 @@
 |    |Status|
 |:--:|:--:|
 |Issues|[![Stories in Ready](https://badge.waffle.io/MoimHossain/netcore-microservice-tutorial.svg?label=ready&title=Ready)](http://waffle.io/MoimHossain/netcore-microservice-tutorial)|
-|Build|[![Build status](http://petabridge-ci.cloudapp.net/app/rest/builds/buildType:AkkaNet_AkkaNetWindowsBuild/statusIcon)](http://petabridge-ci.cloudapp.net/viewType.html?buildTypeId=AkkaNet_AkkaNetWindowsBuild&guest=1)|
+|Build|[![Build Status](https://travis-ci.org/MoimHossain/netcore-microservice-tutorial.svg?branch=master)](https://travis-ci.org/MoimHossain/netcore-microservice-tutorial)|
 
 
 
