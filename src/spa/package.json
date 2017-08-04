@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "mocha --reporter spec",
     "dev": "webpack",
     "start": "webpack-dev-server"
   },
@@ -35,6 +36,8 @@
     "webpack-hot-middleware": "^2.11.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",    
+    "mocha": "^2.4.5",
     "babel-plugin-react-transform": "^2.0.2",
     "babel-preset-stage-0": "^6.5.0",
     "react-transform-hmr": "^1.0.4"
