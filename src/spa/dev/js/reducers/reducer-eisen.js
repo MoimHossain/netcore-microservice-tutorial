@@ -1,8 +1,8 @@
+import * as ACTIONS from '../actions/actionTypes';
 
-export default function (state=[], action) {    
-    
+export default function (state=[], action) {
     switch(action.type) {
-        case 'GET_EISEN': 
+        case ACTIONS.GET_EISEN: 
            return action.payload;
         default:
            return state;

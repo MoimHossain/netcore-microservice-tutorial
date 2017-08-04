@@ -34,14 +34,7 @@ class SideBar extends Component {
 }
 
 
-function mapStateToProps(state) {
-    return {
-        eisen: state.eisen
-    };
-}
-
-function matchDispatchToProps(dispatch){
-    return bindActionCreators({selectEis: selectEis, loadEisen: loadEisen}, dispatch);
-}
-
-export default connect(mapStateToProps, matchDispatchToProps)(SideBar);
+export default connect(
+    (state)=> { return { eisen: state.eisen }; }, 
+    (dispatch) => { return bindActionCreators({selectEis: selectEis, loadEisen: loadEisen}, dispatch); })
+        (SideBar);

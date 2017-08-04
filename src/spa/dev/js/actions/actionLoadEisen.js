@@ -1,3 +1,5 @@
+import * as ACTIONS from './actionTypes';
+
 var ___x = [
         {
             id: '1',
@@ -10,7 +12,7 @@ var ___x = [
 
 function getAllEisenAsync(data) {
     return {
-        type: "GET_EISEN",
+        type: ACTIONS.GET_EISEN,
         payload: data
     };
 }
@@ -19,12 +21,9 @@ function getAllEisenAsync(data) {
 export default function getAllEisen() {
     return dispatch => {        
         axios.get('/api/eisen')
-             .then(res => {
-                 console.log('WE HAVE DATA!!');
-                 console.log(res);
+             .then(res => {                                  
                  dispatch(getAllEisenAsync(res.data));
-             }, error => {
-                 console.log(error);
+             }, error => {                 
                  dispatch(getAllEisenAsync(___x));
              });
     }
