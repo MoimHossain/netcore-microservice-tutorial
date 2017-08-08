@@ -6,7 +6,7 @@ const EisInfo = (props) => (
         <h1 className="ui header">{props.eis.title}</h1>
         <span>{props.eis.description}</span>
         <div className="ignored info ui message">
-            Expected to be completed in a month. Currently is on <b>{props.eis.phase}</b>
+            HI MOIM Expected to be completed in a month. Currently is on <b>{props.eis.phase}</b>
         </div>        
         <div>
             <a href="#" className="ui large rounded image">
