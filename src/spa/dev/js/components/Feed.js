@@ -1,7 +1,6 @@
 
 import React from 'react';
 
-
 const Feed = () => (
         <div className="ui feed">
         <div className="event">

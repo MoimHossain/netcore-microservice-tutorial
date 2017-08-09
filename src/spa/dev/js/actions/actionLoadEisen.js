@@ -1,5 +1,6 @@
 import * as ACTIONS from './actionTypes';
 
+// The default data when the API is unreachable
 var ___x = [
         {
             id: '1',
