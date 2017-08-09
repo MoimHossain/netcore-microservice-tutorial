@@ -16,9 +16,9 @@ const EisInfo = (props) => (
         <div className="ui stacked segment">
             <h3 className="ui header">Related Eisen</h3>
             <div className="ui list">
-                <div className="item">H1 34 NSHKK :L 1/.0 SIS</div>
-                <div className="item">H3 44 ADNSHKK :L 1/.0 SIS</div>
-                <div className="item">H3 44 ADNSHKK :L 1/.0 SIS</div>
+                <div className="item">H1 34 NSSAHKK :L 1/.0 VIS</div>
+                <div className="item">H3 44 ADFGKY :L 1/.0 SIK</div>
+                <div className="item">H3 44 ADNSDSEVV :L 1/.0 YUI</div>
             </div>
         </div>
     </div>
