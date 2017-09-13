@@ -25,5 +25,22 @@ This repo contains some very basic code sample that demonstrates one way of desi
 - NGINX proxies (HA and Reverse proxies) to web APIs
 - ReactJS Front End application
 
+### Run
+
+Kick UI container
+```
+    docker run -d -p 3000:3000 spa-ui
+```
+Kick API
+```
+    docker run -d -p 5000:5000 eisen-api
+```
+Kick Router
+```
+    docker run -d -p 8086:80 app-router
+```
+
+
+
 ### Purpose
 This demo is prepared for a personal talk. But my intention is to take it to a good shape overtime that can illustrate/visualize micro-service architectures running on container clusters. Any remarks..? Please reach out! Thanks.
