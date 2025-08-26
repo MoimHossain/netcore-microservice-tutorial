@@ -7,12 +7,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Akka.Actor;
+using Akka.Configuration;
+using Akka.DependencyInjection;
+using NCoreWebApp.Sagas.Actors;
+using NCoreWebApp.Sagas.Services;
 
 namespace NCoreWebApp
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -28,19 +34,35 @@ namespace NCoreWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
+            services.AddControllers();
+
+            // Configure Akka.NET
+            var akkaConfig = ConfigurationFactory.ParseString(@"
+                akka {
+                    actor {
+                        provider = ""Akka.Actor.LocalActorRefProvider""
+                    }
+                    loglevel = INFO
+                }
+            ");
+
+            // Create ActorSystem and register it
+            var actorSystem = ActorSystem.Create("SagaSystem", akkaConfig);
+            services.AddSingleton(actorSystem);
+
+            // Start the SAGA manager actor
+            var sagaManager = actorSystem.ActorOf(SagaManagerActor.Props(), "saga-manager");
+
+            // Register SAGA service
+            services.AddSingleton<ISagaService, SagaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
@@ -48,12 +70,14 @@ namespace NCoreWebApp
             }
 
             app.UseStaticFiles();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -10,15 +10,15 @@ namespace NCoreWebApp.Dtos
     public class EisDto
     {
         [DataMember]
-        public string ID { get; set; }
+        public string ID { get; set; } = string.Empty;
         [DataMember]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         [DataMember]
-        public string ModelImage { get; set; }
+        public string ModelImage { get; set; } = string.Empty;
         [DataMember]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         [DataMember]
-        public string Phase { get; set; }
+        public string Phase { get; set; } = string.Empty;
     }
 }
 
