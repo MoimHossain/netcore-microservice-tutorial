@@ -1,3 +1,6 @@
 
 export const GET_EISEN = 'LOAD_EISEN'
 export const SELECT_EISEN = 'SELECT_EISEN'
+export const EISEN_UPDATED = 'EISEN_UPDATED'
+export const EISEN_ADDED = 'EISEN_ADDED'
+export const EISEN_DELETED = 'EISEN_DELETED'

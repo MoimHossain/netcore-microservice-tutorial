@@ -1,4 +1,5 @@
 import * as ACTIONS from './actionTypes';
+import axios from 'axios';
 
 // The default data when the API is unreachable
 var ___x = [
@@ -18,6 +19,26 @@ function getAllEisenAsync(data) {
     };
 }
 
+export function eisenUpdated(eisenItem) {
+    return {
+        type: ACTIONS.EISEN_UPDATED,
+        payload: eisenItem
+    };
+}
+
+export function eisenAdded(eisenItem) {
+    return {
+        type: ACTIONS.EISEN_ADDED,
+        payload: eisenItem
+    };
+}
+
+export function eisenDeleted(eisenId) {
+    return {
+        type: ACTIONS.EISEN_DELETED,
+        payload: eisenId
+    };
+}
 
 export default function getAllEisen() {
     return dispatch => {        

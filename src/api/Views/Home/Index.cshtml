@@ -1,68 +1,47 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Package Management" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Bring in libraries from NuGet, Bower, and npm, and automate tasks using Grunt or Gulp.
-                    <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
+<div class="row">
+    <div class="col-md-12">
+        <h2>SignalR Integration Demo</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">Real-time Eisen Data Updates</div>
+            <div class="panel-body">
+                <div id="signalr-status" class="alert alert-info">
+                    <strong>SignalR Status:</strong> <span id="connection-status">Connecting...</span>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Send Test Message</h4>
+                        <div class="form-group">
+                            <input type="text" id="userInput" class="form-control" placeholder="Your name" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="messageInput" class="form-control" placeholder="Your message" />
+                        </div>
+                        <button id="sendButton" class="btn btn-primary" disabled>Send Message</button>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Real-time Messages</h4>
+                        <ul id="messagesList" class="list-group" style="max-height: 300px; overflow-y: auto;">
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12">
+                        <h4>API Operations</h4>
+                        <p>Use these buttons to test real-time updates:</p>
+                        <button id="addEisenBtn" class="btn btn-success">Add New Eisen Item</button>
+                        <button id="updateEisenBtn" class="btn btn-warning">Update First Eisen Item</button>
+                        <button id="deleteEisenBtn" class="btn btn-danger">Delete Last Eisen Item</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
 </div>
 
 <div class="row">
@@ -72,6 +51,7 @@
             <li>Sample pages using ASP.NET Core MVC</li>
             <li><a href="http://go.microsoft.com/fwlink/?LinkId=518004">Bower</a> for managing client-side libraries</li>
             <li>Theming using <a href="http://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
+            <li><strong>SignalR for real-time communication</strong></li>
         </ul>
     </div>
     <div class="col-md-3">
@@ -107,3 +87,119 @@
         </ul>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // For demo purposes, let's test the API endpoints directly
+        // In a real scenario, you would load the SignalR library
+
+        // Set connection status to show the demo is ready
+        document.getElementById("connection-status").textContent = "Demo Ready (SignalR library not loaded due to network restrictions)";
+        document.getElementById("signalr-status").className = "alert alert-warning";
+        
+        // Enable the test buttons
+        document.getElementById("sendButton").disabled = false;
+
+        // Mock SignalR functionality for demonstration
+        function addMessageToList(message, type) {
+            const li = document.createElement("li");
+            li.className = "list-group-item " + (type || "");
+            li.textContent = message;
+            document.getElementById("messagesList").appendChild(li);
+        }
+
+        // Send message button (mock functionality)
+        document.getElementById("sendButton").addEventListener("click", function (event) {
+            const user = document.getElementById("userInput").value;
+            const message = document.getElementById("messageInput").value;
+            
+            if (user && message) {
+                addMessageToList(user + ": " + message);
+                document.getElementById("messageInput").value = "";
+            }
+            event.preventDefault();
+        });
+
+        // API Test buttons
+        document.getElementById("addEisenBtn").addEventListener("click", function () {
+            const newItem = {
+                title: "Test Item " + Date.now(),
+                description: "A test item created via SignalR demo",
+                phase: "Test Phase",
+                modelImage: "https://via.placeholder.com/300x200"
+            };
+
+            fetch('/api/eisen', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newItem)
+            })
+            .then(response => response.json())
+            .then(data => {
+                addMessageToList("NEW ITEM ADDED: " + data.title + " - " + data.phase, "list-group-item-success");
+            })
+            .catch(error => {
+                addMessageToList("Error adding item: " + error, "list-group-item-danger");
+            });
+        });
+
+        document.getElementById("updateEisenBtn").addEventListener("click", function () {
+            // Get first item and update it
+            fetch('/api/eisen')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const item = data[0];
+                        item.phase = "Updated Phase " + Date.now();
+                        
+                        return fetch('/api/eisen/' + item.id, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(item)
+                        });
+                    }
+                })
+                .then(() => {
+                    addMessageToList("ITEM UPDATED: First item phase updated", "list-group-item-warning");
+                })
+                .catch(error => {
+                    addMessageToList("Error updating item: " + error, "list-group-item-danger");
+                });
+        });
+
+        document.getElementById("deleteEisenBtn").addEventListener("click", function () {
+            // Get all items and delete the last one
+            fetch('/api/eisen')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const lastItem = data[data.length - 1];
+                        
+                        return fetch('/api/eisen/' + lastItem.id, {
+                            method: 'DELETE'
+                        });
+                    }
+                })
+                .then(() => {
+                    addMessageToList("ITEM DELETED: Last item removed", "list-group-item-danger");
+                })
+                .catch(error => {
+                    addMessageToList("Error deleting item: " + error, "list-group-item-danger");
+                });
+        });
+
+        // Test the API endpoint to make sure it's working
+        fetch('/api/eisen')
+            .then(response => response.json())
+            .then(data => {
+                addMessageToList("API Connection Test: Found " + data.length + " Eisen items", "list-group-item-info");
+            })
+            .catch(error => {
+                addMessageToList("API Connection Failed: " + error, "list-group-item-danger");
+            });
+    </script>
+}
