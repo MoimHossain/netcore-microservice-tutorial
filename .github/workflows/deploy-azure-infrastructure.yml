@@ -1,0 +1,52 @@
+name: Deploy Azure Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource_group:
+        description: 'Azure Resource Group Name'
+        required: true
+        type: string
+      deploy_type:
+        description: 'Deployment Type'
+        required: true
+        type: choice
+        options:
+          - 'acr-only'
+          - 'complete'
+        default: 'acr-only'
+
+env:
+  AZURE_RESOURCE_GROUP: ${{ github.event.inputs.resource_group }}
+
+jobs:
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Deploy ACR Only
+      if: github.event.inputs.deploy_type == 'acr-only'
+      run: |
+        cd azure-templates
+        chmod +x deploy-acr.sh
+        ./deploy-acr.sh "${{ env.AZURE_RESOURCE_GROUP }}"
+        
+    - name: Deploy Complete Infrastructure
+      if: github.event.inputs.deploy_type == 'complete'
+      run: |
+        cd azure-templates
+        chmod +x deploy-infrastructure.sh
+        ./deploy-infrastructure.sh "${{ env.AZURE_RESOURCE_GROUP }}"
+        
+    - name: Show Deployment Results
+      run: |
+        echo "Deployment completed for resource group: ${{ env.AZURE_RESOURCE_GROUP }}"
+        az resource list --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" --output table

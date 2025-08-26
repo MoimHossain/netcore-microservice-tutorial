@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "projectName": {
+      "value": "ncore-ms-tutorial"
+    },
+    "location": {
+      "value": "East US"
+    },
+    "registrySku": {
+      "value": "Basic"
+    },
+    "appServicePlanSku": {
+      "value": "B1"
+    },
+    "enableAppServicePlan": {
+      "value": true
+    },
+    "enableLogAnalytics": {
+      "value": true
+    },
+    "tags": {
+      "value": {
+        "project": "netcore-microservice-tutorial",
+        "environment": "development",
+        "owner": "netcore-tutorial-team",
+        "purpose": "microservice-infrastructure"
+      }
+    }
+  }
+}

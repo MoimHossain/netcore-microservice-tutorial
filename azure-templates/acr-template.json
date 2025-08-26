@@ -1,0 +1,113 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "description": "ARM template for Azure Container Registry for netcore-microservice-tutorial"
+  },
+  "parameters": {
+    "registryName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure Container Registry. Must be globally unique."
+      },
+      "minLength": 5,
+      "maxLength": 50
+    },
+    "registryLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for the Azure Container Registry"
+      }
+    },
+    "registrySku": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "metadata": {
+        "description": "The SKU tier of the container registry"
+      }
+    },
+    "adminUserEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable admin user for the container registry"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {
+        "project": "netcore-microservice-tutorial",
+        "environment": "development"
+      },
+      "metadata": {
+        "description": "Tags to assign to the container registry"
+      }
+    }
+  },
+  "variables": {
+    "registryApiVersion": "2023-07-01"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "[variables('registryApiVersion')]",
+      "name": "[parameters('registryName')]",
+      "location": "[parameters('registryLocation')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "[parameters('registrySku')]"
+      },
+      "properties": {
+        "adminUserEnabled": "[parameters('adminUserEnabled')]",
+        "policies": {
+          "quarantinePolicy": {
+            "status": "disabled"
+          },
+          "trustPolicy": {
+            "type": "Notary",
+            "status": "disabled"
+          },
+          "retentionPolicy": {
+            "days": 7,
+            "status": "disabled"
+          }
+        },
+        "encryption": {
+          "status": "disabled"
+        },
+        "dataEndpointEnabled": false,
+        "publicNetworkAccess": "Enabled",
+        "networkRuleBypassOptions": "AzureServices"
+      }
+    }
+  ],
+  "outputs": {
+    "registryName": {
+      "type": "string",
+      "value": "[parameters('registryName')]",
+      "metadata": {
+        "description": "Name of the deployed container registry"
+      }
+    },
+    "registryLoginServer": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('registryName'))).loginServer]",
+      "metadata": {
+        "description": "Login server URL for the container registry"
+      }
+    },
+    "registryResourceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('registryName'))]",
+      "metadata": {
+        "description": "Resource ID of the container registry"
+      }
+    }
+  }
+}

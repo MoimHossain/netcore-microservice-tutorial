@@ -1,0 +1,62 @@
+name: Build and Push to ACR
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+env:
+  ACR_NAME: ncoremsreg001  # Update this to match your ACR name from parameters
+  
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        service: [api, spa, ha-proxy]
+        
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Login to ACR
+      run: |
+        az acr login --name ${{ env.ACR_NAME }}
+        
+    - name: Build and push API image
+      if: matrix.service == 'api'
+      run: |
+        cd src/api
+        docker build -t ${{ env.ACR_NAME }}.azurecr.io/eisen-api:${{ github.sha }} .
+        docker push ${{ env.ACR_NAME }}.azurecr.io/eisen-api:${{ github.sha }}
+        docker tag ${{ env.ACR_NAME }}.azurecr.io/eisen-api:${{ github.sha }} ${{ env.ACR_NAME }}.azurecr.io/eisen-api:latest
+        docker push ${{ env.ACR_NAME }}.azurecr.io/eisen-api:latest
+        
+    - name: Build and push SPA image
+      if: matrix.service == 'spa'
+      run: |
+        cd src/spa
+        docker build -t ${{ env.ACR_NAME }}.azurecr.io/spa-ui:${{ github.sha }} .
+        docker push ${{ env.ACR_NAME }}.azurecr.io/spa-ui:${{ github.sha }}
+        docker tag ${{ env.ACR_NAME }}.azurecr.io/spa-ui:${{ github.sha }} ${{ env.ACR_NAME }}.azurecr.io/spa-ui:latest
+        docker push ${{ env.ACR_NAME }}.azurecr.io/spa-ui:latest
+        
+    - name: Build and push HA-Proxy image
+      if: matrix.service == 'ha-proxy'
+      run: |
+        cd src/ha-proxy
+        docker build -t ${{ env.ACR_NAME }}.azurecr.io/app-router:${{ github.sha }} .
+        docker push ${{ env.ACR_NAME }}.azurecr.io/app-router:${{ github.sha }}
+        docker tag ${{ env.ACR_NAME }}.azurecr.io/app-router:${{ github.sha }} ${{ env.ACR_NAME }}.azurecr.io/app-router:latest
+        docker push ${{ env.ACR_NAME }}.azurecr.io/app-router:latest

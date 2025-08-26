@@ -13,8 +13,8 @@ This repo contains some very basic code sample that demonstrates one way of desi
 
 ### Steps
 
-- Docker swarm automation template (Azure RM templates)
-- Azure Container registry
+- ✅ Docker swarm automation template (Azure RM templates)
+- ✅ Azure Container registry
 - Docker stack deployment
 - VS Online build integration (CD)
 - Akka.net Cluster 
@@ -39,6 +39,30 @@ Kick Router
 ```
     docker run -d -p 8086:80 app-router
 ```
+
+## Azure Infrastructure
+
+This project includes Azure Resource Manager (ARM) templates for deploying the necessary infrastructure to Azure.
+
+### Azure Container Registry
+
+Deploy Azure Container Registry to store your Docker images:
+
+```bash
+cd azure-templates
+./deploy-acr.sh <resource-group-name>
+```
+
+### Complete Infrastructure
+
+Deploy the complete infrastructure including ACR, App Service Plan, Log Analytics, and Storage:
+
+```bash
+cd azure-templates
+./deploy-infrastructure.sh <resource-group-name>
+```
+
+For more details, see the [Azure Templates README](azure-templates/README.md).
 
 
 

@@ -1,0 +1,223 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "description": "Complete infrastructure ARM template for netcore-microservice-tutorial including ACR, App Service Plan, and Container Instances"
+  },
+  "parameters": {
+    "projectName": {
+      "type": "string",
+      "defaultValue": "ncore-ms-tutorial",
+      "metadata": {
+        "description": "Name prefix for all resources"
+      },
+      "minLength": 3,
+      "maxLength": 15
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources"
+      }
+    },
+    "registrySku": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "metadata": {
+        "description": "The SKU tier of the container registry"
+      }
+    },
+    "appServicePlanSku": {
+      "type": "string",
+      "defaultValue": "B1",
+      "allowedValues": [
+        "F1",
+        "B1",
+        "B2",
+        "S1",
+        "S2",
+        "P1v2",
+        "P2v2"
+      ],
+      "metadata": {
+        "description": "The SKU of the App Service Plan for container apps"
+      }
+    },
+    "enableAppServicePlan": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether to create an App Service Plan for web app deployment"
+      }
+    },
+    "enableLogAnalytics": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether to create Log Analytics workspace for monitoring"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {
+        "project": "netcore-microservice-tutorial",
+        "environment": "development"
+      },
+      "metadata": {
+        "description": "Tags to assign to all resources"
+      }
+    }
+  },
+  "variables": {
+    "registryName": "[concat(parameters('projectName'), 'acr', uniqueString(resourceGroup().id))]",
+    "appServicePlanName": "[concat(parameters('projectName'), '-asp')]",
+    "logAnalyticsWorkspaceName": "[concat(parameters('projectName'), '-law')]",
+    "storageAccountName": "[concat(parameters('projectName'), 'storage', uniqueString(resourceGroup().id))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2023-07-01",
+      "name": "[variables('registryName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "[parameters('registrySku')]"
+      },
+      "properties": {
+        "adminUserEnabled": true,
+        "policies": {
+          "quarantinePolicy": {
+            "status": "disabled"
+          },
+          "trustPolicy": {
+            "type": "Notary",
+            "status": "disabled"
+          },
+          "retentionPolicy": {
+            "days": 7,
+            "status": "disabled"
+          }
+        },
+        "encryption": {
+          "status": "disabled"
+        },
+        "dataEndpointEnabled": false,
+        "publicNetworkAccess": "Enabled",
+        "networkRuleBypassOptions": "AzureServices"
+      }
+    },
+    {
+      "condition": "[parameters('enableLogAnalytics')]",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2022-10-01",
+      "name": "[variables('logAnalyticsWorkspaceName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "sku": {
+          "name": "PerGB2018"
+        },
+        "retentionInDays": 30,
+        "features": {
+          "enableLogAccessUsingOnlyResourcePermissions": true
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "keyType": "Account",
+              "enabled": true
+            },
+            "blob": {
+              "keyType": "Account",
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Hot"
+      }
+    },
+    {
+      "condition": "[parameters('enableAppServicePlan')]",
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-09-01",
+      "name": "[variables('appServicePlanName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "sku": {
+        "name": "[parameters('appServicePlanSku')]"
+      },
+      "kind": "linux",
+      "properties": {
+        "reserved": true
+      }
+    }
+  ],
+  "outputs": {
+    "registryName": {
+      "type": "string",
+      "value": "[variables('registryName')]",
+      "metadata": {
+        "description": "Name of the deployed container registry"
+      }
+    },
+    "registryLoginServer": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', variables('registryName'))).loginServer]",
+      "metadata": {
+        "description": "Login server URL for the container registry"
+      }
+    },
+    "registryResourceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.ContainerRegistry/registries', variables('registryName'))]",
+      "metadata": {
+        "description": "Resource ID of the container registry"
+      }
+    },
+    "appServicePlanName": {
+      "condition": "[parameters('enableAppServicePlan')]",
+      "type": "string",
+      "value": "[variables('appServicePlanName')]",
+      "metadata": {
+        "description": "Name of the App Service Plan"
+      }
+    },
+    "logAnalyticsWorkspaceName": {
+      "condition": "[parameters('enableLogAnalytics')]",
+      "type": "string",
+      "value": "[variables('logAnalyticsWorkspaceName')]",
+      "metadata": {
+        "description": "Name of the Log Analytics workspace"
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]",
+      "metadata": {
+        "description": "Name of the storage account"
+      }
+    }
+  }
+}
