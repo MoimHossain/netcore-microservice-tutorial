@@ -36,7 +36,7 @@
     "webpack-hot-middleware": "^2.11.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",    
+    "chai": "^3.5.0",
     "mocha": "^2.4.5",
     "babel-plugin-react-transform": "^2.0.2",
     "babel-preset-stage-0": "^6.5.0",
